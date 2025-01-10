@@ -32,4 +32,9 @@ What do we need?
 * A function goes nice in the presentation
 * X number of functions that scaffold up to the bestest function using all tools available
 * Need a paper (write in markdown)
-* Quarto presentation 
+* Quarto presentation
+
+  ## Help Links
+  https://github.com/ddsjoberg/ARD-onboarding
+  https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html
+  https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R
