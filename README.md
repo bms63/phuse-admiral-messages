@@ -31,5 +31,6 @@ What do we need?
 
 * Toy dataset for BMI (Vital Signs)
 * A function goes nice in the presentation
+* X number of functions that scaffold up to the bestest function using all tools available
 * Need a paper (write in markdown)
 * Quarto presentation 
