@@ -24,8 +24,7 @@
 
 modern interface
 snapshot testing (optional)
-
-
+standalone scripts
 
 What do we need?
 
