@@ -2,7 +2,7 @@
 title: "What's in a message?"
 author: "Daniel Sjoberg and Ben Straub"
 format: docx
-editor: visual
+editor: source
 ---
 
 ```{r, echo = FALSE, message = FALSE}
