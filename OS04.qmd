@@ -1,0 +1,111 @@
+---
+title: "What's in a message?"
+author: "Daniel Sjoberg and Ben Straub"
+format: docx
+editor: visual
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(tibble)
+library(dplyr)
+```
+
+## Introduction (needs re-work)
+
+The admiral R package seeks to allow users of R to build ADaM datasets.  The cross-industry team behind admiral have developed numerous functions for working with ADSL, BDS, OCCDS and ADaM other datasets.  In early 2024, we decided to improve the error and warning messages from these functions.  In this presentation, I will first walk you through when and why admiral functions produce error and warnings messages.  Second, I will walk you through how we used the admiraldev, cli and rlang packages to help improve our functions error and warnings messages. A particular focus will be placed on the cli R package for providing users with pertinent information and messaging in the console.  At the end of the presentation, members of the audience will have gained an understanding of the importance of error and warning messages when developing ADaMs with admiral as well as the critical dependency packages used in admiral.
+
+## The Importance of a message / Objective Statement
+
+Trying to stress this in the begginging before we get bogged down into details.
+
+Helping the users to help themselves.
+
+## Package Introductions
+
+## Simple Example (numeric checks)
+
+```{r}
+bmi <- function(hgt, wgt) {
+  wgt / (hgt / 100)^2
+}
+
+hgt <- c(147, 163)
+wgt <- c(54, 78.5)
+
+bmi(hgt, wgt)
+```
+
+```{r}
+input <- data.frame(
+  name = c("Sub1", "Sub2"),
+  hgt <- c(147, 163),
+  wgt <- c("54", "78.5")
+)
+
+check_numeric <- function(){
+  
+}
+
+bmi <- function(.df) {
+  
+  assert_numeric()
+  
+  .df %>% 
+    mutate(bmi = wgt / (hgt / 100)^2)
+}
+
+bmi(input)
+```
+
+
+* Messaging to user needs to go beyond check_numeric error - calling environment
+* Great opportunity to highlight things in cli toolbox
+
+```{r}
+input <- list(
+  name = c("Sub1", "Sub2"),
+  hgt <- c(147, 163),
+  wgt <- c("54", "78.5")
+)
+
+bmi <- function(.df) {
+  .df %>% 
+    mutate(bmi = wgt / (hgt / 100)^2)
+}
+
+bmi(input)
+``` 
+
+```{r}
+input <- tibble::tribble(
+    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
+    "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
+    "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
+    "01-701-1028", "HEIGHT", "Height (cm)", 163.0, "cm",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
+    "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
+  )
+```
+
+## admiral Example
+
+TBD!!
+
+
+
+
+
+## Quality of Life Improvements
+
+modern interface
+
+snapshot testing
+
+standalone scripts
+
+## Helpful Links 
+
+<https://github.com/ddsjoberg/ARD-onboarding> <https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html> <https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R>

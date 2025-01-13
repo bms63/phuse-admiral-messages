@@ -22,9 +22,7 @@
   * 
 # the way we are doing it now (we made it even better!)
 
-modern interface
-snapshot testing (optional)
-standalone scripts
+
 
 What do we need?
 
@@ -34,7 +32,4 @@ What do we need?
 * Need a paper (write in markdown)
 * Quarto presentation
 
-  ## Help Links
-  https://github.com/ddsjoberg/ARD-onboarding
-  https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html
-  https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R
+
