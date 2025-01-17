@@ -8,7 +8,10 @@ editor: source
 ```{r, echo = FALSE, message = FALSE}
 library(tibble)
 library(dplyr)
+library(cli)
 ```
+
+* Due on February 10th
 
 ## Introduction
 
@@ -38,6 +41,8 @@ bmi(hgt = hgt, wgt = wgt)
 Now we provide the bmi function with the alphabet using a built-in constant called `letters`. 
 Unfortunately, our bmi function quickly breaks down, which is good, but the message to the user is not very helpful, especially a user who might be new to R. How can we improve this messaging?
 
+hgt/100 doesn't even exist!
+
 ```{r, error = TRUE}
 bmi(hgt = letters, wgt = LETTERS)
 ```
@@ -47,7 +52,6 @@ bmi(hgt = letters, wgt = LETTERS)
 The cli R package is a tool designed to help R developers create attractive and expressive command-line interfaces. It provides a suite of functions to enhance console output, making it more visually appealing and user-friendly. Key features of the cli package include:
 
 * Text Formatting: It supports various styles, including color, bold, and underline, allowing developers to highlight important messages.
-* Hierarchical Trees: You can create structured, hierarchical representations of data or processes, which can help organize information and make it easier to navigate.
 * Progress Bars and Spinners: These are included to indicate the progress of time-consuming tasks, improving user experience during long computations.
 * Boxes and Lists: The package allows for the addition of borders and lists to format text in an organized way, making it easier to read and comprehend.
 * Unicode Symbols: It supports a wide range of Unicode symbols, which can be used to add icons or symbols to command output.
