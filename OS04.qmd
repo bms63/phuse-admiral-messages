@@ -1,7 +1,7 @@
 ---
 title: "What's in a message?"
 author: "Daniel Sjoberg and Ben Straub"
-format: docx
+format: html
 editor: source
 ---
 
@@ -10,84 +10,160 @@ library(tibble)
 library(dplyr)
 ```
 
-## Introduction (needs re-work)
+## Introduction
 
-The admiral R package seeks to allow users of R to build ADaM datasets.  The cross-industry team behind admiral have developed numerous functions for working with ADSL, BDS, OCCDS and ADaM other datasets.  In early 2024, we decided to improve the error and warning messages from these functions.  In this presentation, I will first walk you through when and why admiral functions produce error and warnings messages.  Second, I will walk you through how we used the admiraldev, cli and rlang packages to help improve our functions error and warnings messages. A particular focus will be placed on the cli R package for providing users with pertinent information and messaging in the console.  At the end of the presentation, members of the audience will have gained an understanding of the importance of error and warning messages when developing ADaMs with admiral as well as the critical dependency packages used in admiral.
+Succint and informative messaging to your users is important to any software project. 
+The messages can help a user self-diagnosis issues they are having with your software providing a more positive experience for the user.
+The admiral R package, which seeks to help users of R to build ADaM datasets is keen on this type of messaging. 
+In this paper, we will walk you through several simple examples looking at how to improve messaging from R using base R and the cli R package. 
+We will then look at an  ?two? admiral examples where the team improved the messaing of the function using the cli package.
+Finally, we will conclude with a brief collection of utlities that can aid you in your quest for improving messaging in R packages. 
 
-## The Importance of a message / Objective Statement
+## What's in a message?
 
-Trying to stress this in the begginging before we get bogged down into details.
+We have constructed a simple bmi function that will use some dummy data. 
+It quickly calculates the bmi for our dummy data as seen below.
 
-Helping the users to help themselves.
-
-## Package Introductions
-
-## Simple Example (numeric checks)
-
-```{r}
-bmi <- function(hgt, wgt) {
-  wgt / (hgt / 100)^2
-}
-
+```{r, error = TRUE}
 hgt <- c(147, 163)
 wgt <- c(54, 78.5)
 
-bmi(hgt, wgt)
+bmi <- function(hgt, wgt) {
+  wgt / (hgt / 100) ^ 2
+}
+
+bmi(hgt = hgt, wgt = wgt)
 ```
 
-```{r}
-input <- data.frame(
-  name = c("Sub1", "Sub2"),
-  hgt <- c(147, 163),
-  wgt <- c("54", "78.5")
-)
+Now we provide the bmi function with the alphabet using a built-in constant called `letters`. 
+Unfortunately, our bmi function quickly breaks down, which is good, but the message to the user is not very helpful, especially a user who might be new to R. How can we improve this messaging?
 
-check_numeric <- function(){
+```{r, error = TRUE}
+bmi(hgt = letters, wgt = LETTERS)
+```
+ 
+## cli is here to help!
+
+The cli R package is a tool designed to help R developers create attractive and expressive command-line interfaces. It provides a suite of functions to enhance console output, making it more visually appealing and user-friendly. Key features of the cli package include:
+
+* Text Formatting: It supports various styles, including color, bold, and underline, allowing developers to highlight important messages.
+* Hierarchical Trees: You can create structured, hierarchical representations of data or processes, which can help organize information and make it easier to navigate.
+* Progress Bars and Spinners: These are included to indicate the progress of time-consuming tasks, improving user experience during long computations.
+* Boxes and Lists: The package allows for the addition of borders and lists to format text in an organized way, making it easier to read and comprehend.
+* Unicode Symbols: It supports a wide range of Unicode symbols, which can be used to add icons or symbols to command output.
+
+```{r, error = TRUE}
+# check inputs using base R stop() ---------------------------------------------
+bmi <- function(hgt, wgt) {
+  # check inputs --------------------------------
+  if (!is.numeric(hgt)) {
+    stop("The hgt argument must be numeric.")
+  }
+  if (!is.numeric(wgt)) {
+    stop("The wgt argument must be numeric.")
+  }
   
+  # perform calculation -------------------------
+  wgt / (hgt / 100) ^ 2
 }
-
-bmi <- function(.df) {
-  
-  assert_numeric()
-  
-  .df %>% 
-    mutate(bmi = wgt / (hgt / 100)^2)
-}
-
-bmi(input)
+bmi(hgt = hgt, wgt = wgt)
+bmi(hgt = letters, wgt = LETTERS)
+# - error message references the calling function. but also includes all arguments, which can be difficult to read for bigger functions
+# - but I do not like the all red text: makes it difficult to see what is the important parts
 ```
 
+```{r, error = TRUE}
+# check inputs using cli::cli_abort() ------------------------------------------
+bmi <- function(hgt, wgt) {
+  # check inputs --------------------------------
+  if (!is.numeric(hgt)) {
+    cli::cli_abort("The {.arg hgt} argument must be numeric.")
+  }
+  if (!is.numeric(wgt)) {
+    cli::cli_abort("The {.arg wgt} argument must be numeric.")
+  }
+  
+  # perform calculation -------------------------
+  wgt / (hgt / 100) ^ 2
+}
+bmi(hgt = hgt, wgt = wgt)
+bmi(hgt = letters, wgt = LETTERS)
+# - clear message that the error occurred in the `bmi()` function
+# - the hgt argument is wrapped in backticks, making the full message easier to read.
+# - includes a `rlang::last_trace()` link, so we can easily devle into the details if needed.
+```
 
-* Messaging to user needs to go beyond check_numeric error - calling environment
-* Great opportunity to highlight things in cli toolbox
+```{r, error = TRUE}
+# Adding a `check_numeric()` function ------------------------------------------
+check_numeric <- function(x, arg_name = rlang::caller_arg(x)) {
+  if (!is.numeric(x)) {
+    cli::cli_abort("The {.arg {arg_name}} argument must be numeric.")
+  }
+  invisible(x)
+}
+# - adding the `arg_name` argument, so we can clearly message to the user which argument is problematic
+# - the {cli} tools use glue syntax! Cute!
 
-```{r}
-input <- list(
-  name = c("Sub1", "Sub2"),
-  hgt <- c(147, 163),
-  wgt <- c("54", "78.5")
-)
+bmi <- function(hgt, wgt) {
+  # check inputs --------------------------------
+  check_numeric(hgt)
+  check_numeric(wgt)
+  
+  # perform calculation -------------------------
+  wgt / (hgt / 100) ^ 2
+}
+bmi(hgt = hgt, wgt = wgt)
+bmi(hgt = letters, wgt = LETTERS)
+# - but this message is worse than before! `Error in `check_numeric()`` references a non-user facing function! :<
+```
 
-bmi <- function(.df) {
-  .df %>% 
-    mutate(bmi = wgt / (hgt / 100)^2)
+```{r, error = TRUE}
+# Add `check_numeric(call)` argument -------------------------------------------
+check_numeric <- function(x, arg_name = rlang::caller_arg(x), call = parent.frame()) {
+  if (!is.numeric(x)) {
+    cli::cli_abort("The {.arg {arg_name}} argument must be numeric.", call = call)
+  }
+  invisible(x)
+}
+# - show that the `cli::cli_abort()` function has a call argument to specify the env from which the USER called the function
+# - discuss `arg_name = rlang::caller_arg(x)` and what it does
+
+bmi <- function(hgt, wgt) {
+  # check inputs --------------------------------
+  check_numeric(hgt)
+  check_numeric(wgt)
+  
+  # perform calculation -------------------------
+  wgt / (hgt / 100) ^ 2
+}
+bmi(hgt = hgt, wgt = wgt)
+bmi(hgt = letters, wgt = LETTERS)
+# - We're back and the messaging is beautiful!
+
+# Add `check_positive()` with `c("i"=)` -----------------------------------------
+check_positive <- function(x, arg_name = rlang::caller_arg(x), call = parent.frame()) {
+  if (any(x <= 0)) {
+    cli::cli_abort(
+      c("x" = "All values in the vector passed in the {.arg {arg_name}} argument must be postive.",
+        "i" = "Consider {.emph checking your data} before attempting to calculate BMI."), 
+      call = call
+    )
+  }
+  invisible(x)
 }
 
-bmi(input)
-``` 
-
-```{r}
-input <- tibble::tribble(
-    ~USUBJID,      ~PARAMCD, ~PARAM,        ~AVAL, ~AVALU, ~VISIT,
-    "01-701-1015", "HEIGHT", "Height (cm)", 147.0, "cm",   "SCREENING",
-    "01-701-1015", "WEIGHT", "Weight (kg)",  54.0, "kg",   "SCREENING",
-    "01-701-1015", "WEIGHT", "Weight (kg)",  54.4, "kg",   "BASELINE",
-    "01-701-1015", "WEIGHT", "Weight (kg)",  53.1, "kg",   "WEEK 2",
-    "01-701-1028", "HEIGHT", "Height (cm)", 163.0, "cm",   "SCREENING",
-    "01-701-1028", "WEIGHT", "Weight (kg)",  78.5, "kg",   "SCREENING",
-    "01-701-1028", "WEIGHT", "Weight (kg)",  80.3, "kg",   "BASELINE",
-    "01-701-1028", "WEIGHT", "Weight (kg)",  80.7, "kg",   "WEEK 2"
-  )
+bmi <- function(hgt, wgt) {
+  # check inputs --------------------------------
+  check_numeric(hgt)
+  check_numeric(wgt)
+  check_positive(hgt)
+  check_positive(wgt)
+  
+  # perform calculation -------------------------
+  wgt / (hgt / 100) ^ 2
+}
+bmi(hgt = hgt, wgt = wgt)
+bmi(hgt = hgt * -1, wgt = wgt)
 ```
 
 ## admiral Example
