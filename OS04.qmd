@@ -1,7 +1,7 @@
 ---
 title: "What's in a message?"
 author: "Daniel Sjoberg and Ben Straub"
-format: html
+format: docx
 editor: source
 ---
 
@@ -12,49 +12,55 @@ library(cli)
 ```
 
 * Due on February 10th
+* Presentation on Monday, March 17th at 1:30 in Oceans 11
 
 ## Introduction
 
-Succint and informative messaging to your users is important to any software project. 
+Succint and informative messaging to your users is important for any successful software project. 
 The messages can help a user self-diagnosis issues they are having with your software providing a more positive experience for the user.
 The admiral R package, which seeks to help users of R to build ADaM datasets is keen on this type of messaging. 
 In this paper, we will walk you through several simple examples looking at how to improve messaging from R using base R and the cli R package. 
-We will then look at an  ?two? admiral examples where the team improved the messaing of the function using the cli package.
+We will then look at admiral for additional examples where the team improved the messaing of the function using the cli package.
 Finally, we will conclude with a brief collection of utlities that can aid you in your quest for improving messaging in R packages. 
 
 ## What's in a message?
 
-We have constructed a simple bmi function that will use some dummy data. 
-It quickly calculates the bmi for our dummy data as seen below.
+R produces warning and error messages. 
+Some are incredibly helpful from the start and others leave something to be deisred.
+As you mature in your R career the more difficult R messages become easier to understand and fix.
+However, if you develop custom code in a R package a great benefit to your user is that you the develop can produce even better messaging to help point your users in the right direction.
+In the next few sections, we have constructed a simple bmi function that will use some dummy data that will showcase slightly difficult to understand R messages and ways we can improve on that message. 
+Let's get started!
 
 ```{r, error = TRUE}
-hgt <- c(147, 163)
-wgt <- c(54, 78.5)
+hgt_good <- c(147, 163)
+wgt_good <- c(54, 78.5)
 
 bmi <- function(hgt, wgt) {
   wgt / (hgt / 100) ^ 2
 }
 
-bmi(hgt = hgt, wgt = wgt)
+bmi(hgt = hgt_good, wgt = wgt_good)
 ```
 
-Now we provide the bmi function with the alphabet using a built-in constant called `letters`. 
+Fantastic! Our bmi function is producing the correct results. Ready for production? No'mam! 
+
+What if the user accidently misstypes and inserts some character values into the variables?
 Unfortunately, our bmi function quickly breaks down, which is good, but the message to the user is not very helpful, especially a user who might be new to R. How can we improve this messaging?
 
-hgt/100 doesn't even exist!
 
 ```{r, error = TRUE}
-bmi(hgt = letters, wgt = LETTERS)
+hgt_bad <- c("a", "b")
+wgt_bad <- c("c", "d")
+
+bmi(hgt = hgt_bad, wgt = wgt_bad)
 ```
- 
-## cli is here to help!
 
-The cli R package is a tool designed to help R developers create attractive and expressive command-line interfaces. It provides a suite of functions to enhance console output, making it more visually appealing and user-friendly. Key features of the cli package include:
+The phrase "non-numeric argument to binary operator" doesn't really jump off the tongue and then there is a reference to `hgt/100`... what is that?
 
-* Text Formatting: It supports various styles, including color, bold, and underline, allowing developers to highlight important messages.
-* Progress Bars and Spinners: These are included to indicate the progress of time-consuming tasks, improving user experience during long computations.
-* Boxes and Lists: The package allows for the addition of borders and lists to format text in an organized way, making it easier to read and comprehend.
-* Unicode Symbols: It supports a wide range of Unicode symbols, which can be used to add icons or symbols to command output.
+## Base R is here to help!
+
+Let's add some checks on the inputs for our function and provide a simple message to user on what seems to be the problem.
 
 ```{r, error = TRUE}
 # check inputs using base R stop() ---------------------------------------------
@@ -70,11 +76,60 @@ bmi <- function(hgt, wgt) {
   # perform calculation -------------------------
   wgt / (hgt / 100) ^ 2
 }
-bmi(hgt = hgt, wgt = wgt)
-bmi(hgt = letters, wgt = LETTERS)
-# - error message references the calling function. but also includes all arguments, which can be difficult to read for bigger functions
-# - but I do not like the all red text: makes it difficult to see what is the important parts
+bmi(hgt = hgt_good, wgt = wgt_good)
 ```
+The bmi function is still producing the same results.  Now let's try it with the pesky character data.
+
+```{r, error = TRUE}
+bmi(hgt = hgt_bad, wgt = wgt_bad)
+```
+
+Fabulous! Our updated function provides us with a better message around our contrived issue. 
+But do we need all that information in the message and do we need it to be all in red? 
+Using the cli R we can improve our messaging even more!
+
+## cli R package is here to help!
+
+The cli R package is a tool designed to help R developers create attractive and expressive command-line interfaces. It provides a suite of functions to enhance console output, making it more visually appealing and user-friendly. 
+Key features of the cli package include:
+
+* Text Formatting: It supports various styles, including color, bold, and underline, allowing developers to highlight important messages.
+* Progress Bars and Spinners: These are included to indicate the progress of time-consuming tasks, improving user experience during long computations.
+* Boxes and Lists: The package allows for the addition of borders and lists to format text in an organized way, making it easier to read and comprehend.
+* Unicode Symbols: It supports a wide range of Unicode symbols, which can be used to add icons or symbols to command output.
+
+Now we have some power with cli package! We will make use of the `cli_abort()` function to create a custom error message that is more informative to the user. 
+
+```{r, error = TRUE}
+# check inputs using cli::cli_abort() ------------------------------------------
+bmi <- function(hgt, wgt) {
+  # check inputs --------------------------------
+  if (!is.numeric(hgt)) {
+    cli::cli_abort("The hgt argument must be numeric.")
+  }
+  if (!is.numeric(wgt)) {
+    cli::cli_abort("The wgt argument must be numeric.")
+  }
+  
+  # perform calculation -------------------------
+  wgt / (hgt / 100) ^ 2
+}
+bmi(hgt = hgt_good, wgt = wgt_good)
+```
+Looking fabulous! Now let's break it.
+
+```{r, error =TRUE}
+bmi(hgt = hgt_good, wgt = wgt_bad)
+```
+The message is much clearer to the user that the error is from the `bmi()` function
+and includes a `rlang::last_trace()` link, so we can easily devle into the details if needed. But we can do better if use the glue R package!
+
+## glue R package is here to help!
+
+The glue R packag offers interpreted string literals that are small, fast, and dependency-free. 
+glue does this by embedding R expressions in curly braces, which are then evaluated and inserted into the string. 
+
+We want the arugments causing issues to "pop out" to the user.  We can use the glue syntax `{.arg arg_name}` to achieve this as seen below.
 
 ```{r, error = TRUE}
 # check inputs using cli::cli_abort() ------------------------------------------
@@ -90,12 +145,12 @@ bmi <- function(hgt, wgt) {
   # perform calculation -------------------------
   wgt / (hgt / 100) ^ 2
 }
-bmi(hgt = hgt, wgt = wgt)
-bmi(hgt = letters, wgt = LETTERS)
-# - clear message that the error occurred in the `bmi()` function
-# - the hgt argument is wrapped in backticks, making the full message easier to read.
-# - includes a `rlang::last_trace()` link, so we can easily devle into the details if needed.
+bmi(hgt = hgt_good, wgt = wgt_good)
 ```
+```{r, error =TRUE}
+bmi(hgt = hgt_good, wgt = wgt_bad)
+```
+We now have backticks surrounding the argument.  Unfortunately, we are reapting ourselevs inside our function with the two numeric checks.  Let's add a `check_numeric()` function.
 
 ```{r, error = TRUE}
 # Adding a `check_numeric()` function ------------------------------------------
@@ -116,10 +171,18 @@ bmi <- function(hgt, wgt) {
   # perform calculation -------------------------
   wgt / (hgt / 100) ^ 2
 }
-bmi(hgt = hgt, wgt = wgt)
-bmi(hgt = letters, wgt = LETTERS)
-# - but this message is worse than before! `Error in `check_numeric()`` references a non-user facing function! :<
 ```
+
+```{r}
+bmi(hgt = hgt_good, wgt = wgt_good)
+```
+```{r, error = TRUE}
+bmi(hgt = hgt_bad, wgt = wgt_bad)
+```
+
+Bah! We made our code less repititive, but now our message to the user doesn't make a lot of sense as they might never see `check_numeric()`.  We can use the available arguments in `cli_abort()`
+to specicy the enviroment form which the user called the function, i.e. `call = parent.frame()`
+>>>># - discuss `arg_name = rlang::caller_arg(x)` and what it does<<<<
 
 ```{r, error = TRUE}
 # Add `check_numeric(call)` argument -------------------------------------------
@@ -129,8 +192,6 @@ check_numeric <- function(x, arg_name = rlang::caller_arg(x), call = parent.fram
   }
   invisible(x)
 }
-# - show that the `cli::cli_abort()` function has a call argument to specify the env from which the USER called the function
-# - discuss `arg_name = rlang::caller_arg(x)` and what it does
 
 bmi <- function(hgt, wgt) {
   # check inputs --------------------------------
@@ -141,9 +202,17 @@ bmi <- function(hgt, wgt) {
   wgt / (hgt / 100) ^ 2
 }
 bmi(hgt = hgt, wgt = wgt)
-bmi(hgt = letters, wgt = LETTERS)
-# - We're back and the messaging is beautiful!
+```
 
+```{r, error = TRUE}
+bmi(hgt = hgt_bad, wgt = wgt_bad)
+```
+
+Phew! We are back in action and are looking good! ...but we can keep going! How about
+we add a `check_positive()` function that checks that your data are all positive, expore the list possibilites of `cli_abort()` and showcase additional ways to highlight important information to your user using glue `{.emph}`.
+
+
+```{r}
 # Add `check_positive()` with `c("i"=)` -----------------------------------------
 check_positive <- function(x, arg_name = rlang::caller_arg(x), call = parent.frame()) {
   if (any(x <= 0)) {
@@ -166,15 +235,109 @@ bmi <- function(hgt, wgt) {
   # perform calculation -------------------------
   wgt / (hgt / 100) ^ 2
 }
-bmi(hgt = hgt, wgt = wgt)
-bmi(hgt = hgt * -1, wgt = wgt)
+bmi(hgt = hgt_good, wgt = wgt_good)
 ```
+
+```{r, error = TRUE}
+bmi(hgt = hgt_good * -1, wgt = wgt_good)
+```
+
+The message is clear!  The function `bmi()` has an Error.  The arugment hgt is receiveing data that is not positive and we request that users double check that their data is correct.
 
 ## admiral Example
 
-TBD!!
+admiral has a helper package called admiraldev that utilitizes a lot of great functions from cli and glue packages.  In early 2024, we made an effort
+
+```{r}
+assert_s3_class <- function(arg, cls,
+                            optional = FALSE,
+                            arg_name = rlang::caller_arg(arg),
+                            message = NULL,
+                            class = "assert_s3_class",
+                            call = parent.frame()) {
+  assert_character_scalar(cls)
+  assert_logical_scalar(optional)
+
+  if (is.null(arg) && optional) {
+    return(invisible(arg))
+  }
+
+  messagge <-
+    message %||%
+    "Argument {.arg {arg_name}} must be class {.cls {cls}}, but is {.obj_type_friendly {arg}}."
+
+  if (!inherits(arg, cls)) {
+    cli_abort(
+      message = messagge,
+      class = c(class, "assert-admiraldev"),
+      call = call
+    )
+  }
+
+  invisible(arg)
+}
+```
+
+```{r}
+assert_data_frame <- function(arg,
+                              required_vars = NULL,
+                              check_is_grouped = TRUE,
+                              optional = FALSE,
+                              arg_name = rlang::caller_arg(arg),
+                              message = NULL,
+                              class = "assert_data_frame",
+                              call = parent.frame()) {
+  assert_vars(required_vars, optional = TRUE)
+  assert_logical_scalar(check_is_grouped)
+  assert_logical_scalar(optional)
+
+  if (optional && is.null(arg)) {
+    return(invisible(arg))
+  }
+
+  assert_s3_class(
+    arg,
+    cls = "data.frame",
+    optional = optional,
+    arg_name = arg_name,
+    message = message,
+    class = class,
+    call = call
+  )
+
+  if (check_is_grouped && dplyr::is_grouped_df(arg)) {
+    cli_abort(
+      message = message %||%
+        "Argument {.arg {arg_name}} must not be a grouped dataset, please `ungroup()` it.",
+      class = c(class, "assert-admiraldev"),
+      call = call
+    )
+  }
+
+  if (!is.null(required_vars)) {
+    required_vars <- vars2chr(required_vars)
+    is_missing <- !required_vars %in% colnames(arg)
+    if (any(is_missing)) {
+      missing_vars <- required_vars[is_missing]
+      if (length(missing_vars) == 1L) {
+        err_msg <- "Required variable {.var {missing_vars}} is missing in {.arg {arg_name}}"
+      } else {
+        err_msg <- "Required variables {.var {missing_vars}} are missing in {.arg {arg_name}}"
+      }
+      cli_abort(
+        message = message %||%
+          err_msg,
+        class = c(class, "assert-admiraldev"),
+        call = call
+      )
+    }
+  }
+
+  invisible(arg)
+}
 
 
+```
 
 
 
@@ -189,3 +352,4 @@ standalone scripts
 ## Helpful Links 
 
 <https://github.com/ddsjoberg/ARD-onboarding> <https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html> <https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R>
+<https://glue.tidyverse.org/>
