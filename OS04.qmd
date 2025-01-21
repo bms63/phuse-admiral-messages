@@ -1,7 +1,7 @@
 ---
 title: "What's in a message?"
 author: "Daniel Sjoberg and Ben Straub"
-format: docx
+format: html
 editor: source
 ---
 
@@ -93,10 +93,10 @@ Using the cli R we can improve our messaging even more!
 The cli R package is a tool designed to help R developers create attractive and expressive command-line interfaces. It provides a suite of functions to enhance console output, making it more visually appealing and user-friendly. 
 Key features of the cli package include:
 
-* Text Formatting: It supports various styles, including color, bold, and underline, allowing developers to highlight important messages.
-* Progress Bars and Spinners: These are included to indicate the progress of time-consuming tasks, improving user experience during long computations.
-* Boxes and Lists: The package allows for the addition of borders and lists to format text in an organized way, making it easier to read and comprehend.
-* Unicode Symbols: It supports a wide range of Unicode symbols, which can be used to add icons or symbols to command output.
+* *Text Formatting*: It supports various styles, including color, bold, and underline, allowing developers to highlight important messages.
+* *Progress Bars and Spinners*: These are included to indicate the progress of time-consuming tasks, improving user experience during long computations.
+* *Boxes and Lists*: The package allows for the addition of borders and lists to format text in an organized way, making it easier to read and comprehend.
+* *Unicode Symbols*: It supports a wide range of Unicode symbols, which can be used to add icons or symbols to command output.
 
 Now we have some power with cli package! We will make use of the `cli_abort()` function to create a custom error message that is more informative to the user. 
 
@@ -126,8 +126,15 @@ and includes a `rlang::last_trace()` link, so we can easily devle into the detai
 
 ## glue R package is here to help!
 
-The glue R packag offers interpreted string literals that are small, fast, and dependency-free. 
-glue does this by embedding R expressions in curly braces, which are then evaluated and inserted into the string. 
+The glue package in R is designed to efficiently interpolate and paste together strings. Its primary abilities include:
+
+* *String Interpolation*: glue allows you to embed R expressions inside curly braces {} within a string. The expressions are evaluated, and their results are interpolated into the string. This makes it highly convenient for dynamically generating strings with variable content.
+* *Improved Readability*: The use of curly-brace syntax within strings can lead to cleaner and more readable code compared to traditional paste or sprintf functions, especially when dealing with a mixture of text and variable data.
+* *Multiline Strings*: The glue package supports multiline strings, allowing for easy formatting of strings that span multiple lines.
+* *Parameter Passing*: You can pass additional named arguments to the glue() function, which can be used within the string expressions. This feature is useful for keeping the code concise while providing custom evaluations.
+* *Safe Evaluation*: For cases where you want to insert values safely without risk of accidental execution of unwanted expressions, glue provides safe evaluation environments.
+* *Custom Separators*: The package allows specification of custom separators and collapse arguments, offering flexibility similar to paste() functions.
+* *Integration with Tidyverse*: The syntax and design of glue make it a good fit for use alongside other tidyverse packages, enhancing its functionality in data manipulation and generation tasks.
 
 We want the arugments causing issues to "pop out" to the user.  We can use the glue syntax `{.arg arg_name}` to achieve this as seen below.
 
