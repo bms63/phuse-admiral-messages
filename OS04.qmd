@@ -269,7 +269,7 @@ assert_s3_class <- function(arg, cls,
   }
 
   # use default message if one not provided in the `message` argument
-  messagge <-
+  message <-
     ifelse(
       is.null(message),
       "Argument {.arg {arg_name}} must be class {.cls {cls}}, but is {.obj_type_friendly {arg}}.",
