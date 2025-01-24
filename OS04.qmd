@@ -189,6 +189,8 @@ bmi(hgt = hgt_bad, wgt = wgt_bad)
 
 Bah! We made our code less repititive, but now our message to the user doesn't make a lot of sense as they might never see `check_numeric()`.  We can use the available arguments in `cli_abort()`
 to specicy the enviroment form which the user called the function, i.e. `call = parent.frame()`
+
+# TODO: Daniel to add
 >>>># - discuss `arg_name = rlang::caller_arg(x)` and what it does<<<<
 
 ```{r, error = TRUE}
