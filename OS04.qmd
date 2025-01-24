@@ -276,10 +276,7 @@ assert_s3_class <- function(arg, cls,
 
   # print error if input does not match specified class
   if (!inherits(arg, cls)) {
-    cli::cli_abort(
-      message = messagge,
-      call = call
-    )
+    cli::cli_abort(message = messagge, call = call)
   }
 
   invisible(arg)
