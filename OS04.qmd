@@ -264,14 +264,17 @@ assert_s3_class <- function(arg, cls,
                             message = NULL,
                             class = "assert_s3_class",
                             call = parent.frame()) {
+  # if argument is optional and the value is NULL, exit function
   if (is.null(arg) && optional) {
     return(invisible(arg))
   }
 
+  # use default message if one not provided in the `message` argument
   messagge <-
     message %||%
     "Argument {.arg {arg_name}} must be class {.cls {cls}}, but is {.obj_type_friendly {arg}}."
 
+  # print error if input does not match specified class
   if (!inherits(arg, cls)) {
     cli::cli_abort(
       message = messagge,
