@@ -264,9 +264,6 @@ assert_s3_class <- function(arg, cls,
                             message = NULL,
                             class = "assert_s3_class",
                             call = parent.frame()) {
-  assert_character_scalar(cls)
-  assert_logical_scalar(optional)
-
   if (is.null(arg) && optional) {
     return(invisible(arg))
   }
@@ -276,9 +273,8 @@ assert_s3_class <- function(arg, cls,
     "Argument {.arg {arg_name}} must be class {.cls {cls}}, but is {.obj_type_friendly {arg}}."
 
   if (!inherits(arg, cls)) {
-    cli_abort(
+    cli::cli_abort(
       message = messagge,
-      class = c(class, "assert-admiraldev"),
       call = call
     )
   }
