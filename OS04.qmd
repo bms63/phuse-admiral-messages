@@ -1,7 +1,7 @@
 ---
 title: "What's in a message?"
 author: "Daniel Sjoberg and Ben Straub"
-format: html
+format: docx
 editor: source
 ---
 
@@ -15,7 +15,7 @@ library(glue)
 * Due on February 10th
 * Presentation on Monday, March 17th at 1:30 in Oceans 11
 
-## Introduction
+## ABSTRACT
 
 Succinct and informative messaging to your users is important for any successful software project. 
 These messages can help a user quickly self-diagnosis issues they are having with your software providing a more positive experience for the user.
@@ -24,7 +24,7 @@ In this paper, we will walk you through several simple examples looking at how t
 We will then look at admiral for additional examples where the team improved the messaing of the function using the cli package.
 Finally, we will conclude with a brief collection of utlities that can aid you in your quest for improving messaging in R packages. 
 
-## What's in a message?
+## INTRODUCTION - WHAT'S IN A MESSAGE?
 
 Let's put yourself in a new user of R shoes. 
 Perhaps you even are a new user and welcome! 
@@ -74,7 +74,7 @@ bmi(hgt = hgt_bad, wgt = wgt_bad)
 
 The phrase "non-numeric argument to binary operator" doesn't really jump off the tongue and then there is a reference to `hgt/100`... where is that?
 
-## Base R is here to help!
+## BASE R IS HERE TO HELP!
 
 Let's add some checks on the inputs for our function and provide a simple message to user on what seems to be the problem.
 
@@ -103,7 +103,7 @@ Fabulous! Our updated function provides us with a better message around our cont
 But is all that information in the message helpful and does need it need to be all in red? 
 Using the cli R package we can improve our messaging even more!
 
-## cli R package is here to help!
+## CLI R PACKAGE IS HERE TO HELP!
 
 The cli R package is a tool designed to help R developers create attractive and expressive command-line interfaces. It provides a suite of functions to enhance console output, making it more visually appealing and user-friendly. 
 Key features of the cli package include:
@@ -140,7 +140,7 @@ The message is much clearer to the user that the error is from the `bmi()` funct
 Additionally, the cli packages provides a `rlang::last_trace()` link, so we can easily delve into the details if needed. 
 But we can do even better if we make use of the glue R package!
 
-## glue R package is here to help!
+## GLUE R PACKAGE IS HERE TO HELP!
 
 The glue package in R is designed to efficiently interpolate and paste together strings. Its primary abilities include:
 
@@ -268,7 +268,7 @@ The message is clear!
 The function `bmi()` has an Error. 
 The argument hgt is receiving data that is not positive and we request that users double check that their data is in correct before inputing into the `bmi()` function.
 
-## admiral Example
+## ADMIRAL EXAMPLE
 
 The admiral R package began in earnest in 2021. 
 A core desing principal was to have informative messaging to our users making use of the package.
@@ -320,7 +320,7 @@ For this function, a nice touch is that the developer can also further customize
 Most of the `assert_` functions within admiraldev follow similar code pattern, i.e. checking an arugment and if an issue/error arises providing a succinct yet informative message. 
 We encourage readers to check out the `assert_` functions in admiraldev GitHub Repo for additional examples of using cli and glue R packages.
 
-## Quality of Life Improvements and Conclusion
+## QUALITY OF LIFE IMPROVEMENTS
 
 snapshot testing - something
 
@@ -328,7 +328,39 @@ standalone scripts - something
 
 tie it all together and ship it amazon express
 
-## Reference
+## CONCLUSIONS
+
+## REFERENCES
 
 <https://github.com/ddsjoberg/ARD-onboarding> <https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html> <https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R>
 <https://glue.tidyverse.org/>
+
+## ACKNOWLEDGMENTS
+
+Acknowledgments go after your references. This section is not required.
+
+## RECOMMENDED READING =
+
+Recommended reading lists go after your acknowledgments. This section is not required.
+
+## CONTACT INFORMATION=
+
+(In case a reader wants to get in touch with you, please put your contact information at the end of the paper.)
+
+Your comments and questions are valued and encouraged. Contact the author at:
+
+Author Name:
+
+Company:
+
+Address:
+
+Work Phone:
+
+Email:
+
+Website:
+
+
+Brand and product names are trademarks of their respective companies.
+
