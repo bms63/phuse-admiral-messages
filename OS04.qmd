@@ -264,14 +264,27 @@ bmi(hgt = hgt_good, wgt = wgt_good)
 bmi(hgt = hgt_good * -1, wgt = wgt_good)
 ```
 
-The message is clear!  The function `bmi()` has an Error.  The argument hgt is receiving data that is not positive and we request that users double check that their data is correct.
+The message is clear! 
+The function `bmi()` has an Error. 
+The argument hgt is receiving data that is not positive and we request that users double check that their data is in correct before inputing into the `bmi()` function.
 
 ## admiral Example
 
-admiral has a helper package called admiraldev that utilises a lot of great functions from cli and glue packages.  In early 2024, we made an effort
+The admiral R package began in earnest in 2021. 
+A core desing principal was to have informative messaging to our users making use of the package.
+We made use of a lot of base R messaging techniques, which was helpful, but always left something to be desired.
+In early 2024, we made a concerted effort to utilize more heavily the cli and glue R packages to give even better messaging to the users. 
+This adoption had the added benefit of adopting snapshot testing, which we will discuss in the last section.
+
+The admiral R package has a helper function admiraldev that is only utilized by admiral developers. 
+Within the admiraldev package we have a series of functions that check user inputs and provides appropriate error messaging if something is amiss starting with `assert_`.
+Below we have the `assert_s3_class` which checks if the class of the argument is of the S3 class - think dataframe/tibble.
+
+Readers of the simple example using the `bmi()` function will notice many similarities:
 
 ```{r}
-assert_s3_class <- function(arg, cls,
+assert_s3_class <- function(arg, 
+                            cls,
                             optional = FALSE,
                             arg_name = rlang::caller_arg(arg),
                             message = NULL,
@@ -298,16 +311,24 @@ assert_s3_class <- function(arg, cls,
 }
 ```
 
+* Use of `cli::cli_abort()` for the error message
+* Use of glue snytax to add emphasis to sections of the message
+* Use `rlang::caller_arg(arg)` to ...
+* Use of `call = parent.frame()` to ...
 
-## Quality of Life Improvements
+For this function, a nice touch is that the developer can also further customize the message if the standard message from the `assert_s3_class()` does not meet their needs.
+Most of the `assert_` functions within admiraldev follow similar code pattern, i.e. checking an arugment and if an issue/error arises providing a succinct yet informative message. 
+We encourage readers to check out the `assert_` functions in admiraldev GitHub Repo for additional examples of using cli and glue R packages.
 
-modern interface
+## Quality of Life Improvements and Conclusion
 
-snapshot testing
+snapshot testing - something
 
-standalone scripts
+standalone scripts - something
 
-## Helpful Links 
+tie it all together and ship it amazon express
+
+## Reference
 
 <https://github.com/ddsjoberg/ARD-onboarding> <https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html> <https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R>
 <https://glue.tidyverse.org/>
