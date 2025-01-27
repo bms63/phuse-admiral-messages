@@ -365,6 +365,7 @@ We encourage readers to check out the `assert_` functions in the `admiraldev` Gi
 
 ### Snapshot Testing
 
+TODO: Daniel to finalize this section
 **Definition:** Snapshot testing involves capturing output (snapshots) from a function or process at a point in time and later checking to see if this output matches the expected value. This is particularly helpful for testing visual outputs, complex data structures, and any output that might be cumbersome to define manually beforehand.
 
 **Implementation in R:** The testthat package provides snapshot testing capabilities, allowing you to capture current outputs and compare them against stored snapshots during tests. If outputs change unexpectedly, the differences are highlighted, prompting a review.
@@ -372,6 +373,7 @@ standalone scripts - something
 
 ### Standalone
 
+TODO: Daniel to finalize this section
 **Standalone Nature:** The script is designed to be self-contained, meaning it can be copied and used in other R projects without having to depend on the entire rlang package. This is useful for developers who want to use certain type-checking utilities without introducing unnecessary dependencies.
 
 No no need to re-write everything!
