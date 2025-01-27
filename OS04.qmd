@@ -398,8 +398,6 @@ The R open-source community. You all are a special bunch.
 
 ## CONTACT INFORMATION
 
-(In case a reader wants to get in touch with you, please put your contact information at the end of the paper.)
-
 Your comments and questions are valued and encouraged. Contact the authors at: </br>
 Author Name: Daniel Sjoberg </br>
 Company: Genentech </br>
