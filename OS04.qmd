@@ -402,9 +402,9 @@ The R open-source community. You all are a special bunch.
 
 Your comments and questions are valued and encouraged. Contact the authors at: </br>
 Author Name: Daniel Sjoberg </br>
-Company: Roche </br>
-Email: </br>
-Website: </br>
+Company: Genentech </br>
+Email: sjobergd_at_gene.com
+Website: https://www.danieldsjoberg.com/ </br>
  
 Author Name: Ben Straub </br>
 Company: GSK </br>
