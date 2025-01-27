@@ -378,7 +378,7 @@ No no need to re-write everything!
 
 ## CONCLUSIONS
 
-In conclusion, the paper illustrates the critical role of clear and user-friendly messaging in enhancing software usability, particularly for new users navigating R programming. 
+This paper illustrates the critical role of clear and user-friendly messaging in enhancing software usability, particularly for new users navigating R programming. 
 By leveraging tools such as the cli and glue packages, developers can craft error and warning messages that are not only informative but also engaging and supportive, as demonstrated through the bmi() function examples. 
 The admiral package's approach to robust messaging exemplifies best practices, highlighting the importance of improving user communication to prevent confusion and facilitate troubleshooting. 
 Additionally, the integration of snapshot testing and standalone scripts, as discussed in the paper, offers practical ways to maintain message consistency and reduce dependencies within R projects. 
@@ -386,30 +386,30 @@ Collectively, these strategies and tools contribute to a positive user experienc
 
 ## REFERENCES
 
-<https://github.com/ddsjoberg/ARD-onboarding> <https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html> <https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R>
-<https://glue.tidyverse.org/>
-<https://cli.tidyverse.org/>
-<https://pharmaverse.github.io/admiral>
-<https://pharmaverse.github.io/admiraldev>
+<https://github.com/ddsjoberg/ARD-onboarding> </br> <https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html> </br> <https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R> </br>
+<https://glue.tidyverse.org/> </br>
+<https://cli.tidyverse.org/> </br>
+<https://pharmaverse.github.io/admiral> </br>
+<https://pharmaverse.github.io/admiraldev> </br>
 
 ## ACKNOWLEDGMENTS
 
 The R open-source community. You all are a special bunch.
 
-## CONTACT INFORMATION=
+## CONTACT INFORMATION
 
 (In case a reader wants to get in touch with you, please put your contact information at the end of the paper.)
 
-Your comments and questions are valued and encouraged. Contact the authors at:
-Author Name: Daniel Sjoberg
-Company: Roche
-Email:
-Website:
-
-Author Name: Ben Straub
-Company: GSK
-Email: ben.x.straub_at_gsk.com
-Website: https://www.linkedin.com/in/ben-straub/
+Your comments and questions are valued and encouraged. Contact the authors at: </br>
+Author Name: Daniel Sjoberg </br>
+Company: Roche </br>
+Email: </br>
+Website: </br>
+ 
+Author Name: Ben Straub </br>
+Company: GSK </br>
+Email: ben.x.straub_at_gsk.com  </br>
+Website: https://www.linkedin.com/in/ben-straub/ </br>
 
 Brand and product names are trademarks of their respective companies.
 
