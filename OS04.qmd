@@ -223,10 +223,13 @@ bmi(hgt = hgt_bad, wgt = wgt_bad)
 ```
 
 Bah! We made our code less repetitive, but now our message to the user doesn't make a lot of sense as they might never see `check_numeric()` if they use `bmi()` from a package. 
-We can use the available arguments in `cli_abort()` to specify the environment form which the user called the function, i.e. `call = parent.frame()`
+We can use the available arguments in `cli_abort()` to specify the environment form which the user called the function, i.e. `call = parent.frame()`.
+By setting the default to `parent.frame()` the calling frame that will be used in the messaging will correctly reflect the function the user called.
 
-* TODO: Daniel to add/discuss `arg_name = rlang::caller_arg(x)` and what it does
-* TODO: Daniel to add/discuss  `call = parent.frame()` and what it does
+
+We have also add the argument `arg_name`.'
+This argument is a string naming the argument that `check_numeric()` is checking.
+The default value for this argument is `rlang::caller_arg(x)`, which converts the symbol or argument name passed in `check_numeric(x)` to a string.
 
 ```{r, error = TRUE}
 # Add `check_numeric(call)` argument 
@@ -365,18 +368,18 @@ We encourage readers to check out the `assert_` functions in the `admiraldev` Gi
 
 ### Snapshot Testing
 
-TODO: Daniel to finalize this section
-**Definition:** Snapshot testing involves capturing output (snapshots) from a function or process at a point in time and later checking to see if this output matches the expected value. This is particularly helpful for testing visual outputs, complex data structures, and any output that might be cumbersome to define manually beforehand.
-
-**Implementation in R:** The testthat package provides snapshot testing capabilities, allowing you to capture current outputs and compare them against stored snapshots during tests. If outputs change unexpectedly, the differences are highlighted, prompting a review.
-standalone scripts - something
+Snapshot testing involves capturing output from a function or process at a point in time and later checking to see if this output matches the expected value.
+Snapshot unit tests are a great way to test error messaging, particularly those using `cli::cli_abort()` because it will capture both the error message and the user calling function in the snapshot.
+The testthat package provides snapshot testing capabilities, allowing you to capture current outputs and compare them against stored snapshots during tests.
+If outputs change unexpectedly, the differences are highlighted, prompting an interactive review. 
 
 ### Standalone
 
-TODO: Daniel to finalize this section
-**Standalone Nature:** The script is designed to be self-contained, meaning it can be copied and used in other R projects without having to depend on the entire rlang package. This is useful for developers who want to use certain type-checking utilities without introducing unnecessary dependencies.
-
-No no need to re-write everything!
+Writing function list `check_numeric()` are incredibly useful when writing a package.
+But it could be daunting to write a suite of functions to check all scenarios.
+Posit, PBC has created a stand alone script with many useful checks.
+You can add these functions to your package by running `usethis::use_standalone("r-lib/rlang", file = "standalone-types-check.R")`; a cop of the script will be placed in your active repository.
+Additional check functions are available with `usethis::use_standalone("insightsengineering/standalone", file = "standalone-checks.R")`.
 
 ## CONCLUSIONS
 
