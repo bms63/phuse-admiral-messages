@@ -20,10 +20,10 @@ library(glue)
 
 Effective software projects often prioritize delivering clear and informative messages to users when issues arise. 
 Incorporating a touch of humor, as illustrated in the image at the end of this section, can enhance user experience by enabling quicker self-diagnosis and resolution.
-These messages can help a user quickly self-diagnosis issues they are having with your software providing a more positive experience for the user.
-The admiral R package, which seeks to help users of R to build ADaM datasets, is keen on this type of messaging. 
+Users being albe to quickly self-diagnosis issues they are having with your software can provide a more positive experience for the user.
+The `admiral` R package, which seeks to help users of R to build ADaM datasets, is keen on this type of messaging. 
 In this paper, we will walk you through several simple examples looking at how to improve messaging from R using base R and the `cli` and `glue` R packages. 
-We will then look at `admiral` for additional examples where the team improved the messaing of the function using the `cli` and `glue` packages.
+We will then look at `admiral` for additional examples where the team improved the messaging of the function using the `cli` and `glue` packages.
 Finally, we will conclude with a brief collection of utlities that can aid you in your quest for improving your messaging. 
 
 <div style="text-align: center;">
@@ -70,11 +70,7 @@ bmi(hgt = hgt_good, wgt = wgt_good)
 Fantastic! Our bmi function is producing the correct results.
 Ready to be put into a R package? 
 Let's not go to fast! 
-
 What if the user accidentally misstypes and inserts some character values into the variables?
-Unfortunately, our `bmi()` function quickly breaks down with this character data, but the message to the user is not very helpful.
-We think this message is especially unhelpful for a new user to R. 
-How can we improve this messaging?
 
 ```{r, error = TRUE}
 hgt_bad <- c("a", "b")
@@ -83,7 +79,10 @@ wgt_bad <- c("c", "d")
 bmi(hgt = hgt_bad, wgt = wgt_bad)
 ```
 
+Unfortunately, our `bmi()` function quickly breaks down with this character data, but the message to the user is not very helpful.
 The phrase `non-numeric argument to binary operator` doesn't really jump off the tongue and then there is a reference to `hgt/100`... where is that in our data or is that in the function?
+We think this message is especially unhelpful for a new user to R. 
+How can we improve this messaging?
 
 ## BASE R IS HERE TO HELP!
 
@@ -227,7 +226,7 @@ We can use the available arguments in `cli_abort()` to specify the environment f
 By setting the default to `parent.frame()` the calling frame that will be used in the messaging will correctly reflect the function the user called.
 
 
-We have also add the argument `arg_name`.'
+We have also add the argument `arg_name`.
 This argument is a string naming the argument that `check_numeric()` is checking.
 The default value for this argument is `rlang::caller_arg(x)`, which converts the symbol or argument name passed in `check_numeric(x)` to a string.
 
@@ -249,7 +248,7 @@ bmi <- function(hgt, wgt) {
   wgt / (hgt / 100)^2
 }
 
-bmi(hgt = hgt, wgt = wgt)
+bmi(hgt = hgt_good, wgt = wgt_good)
 ```
 
 Our updates have no impact to the function when working properly.
@@ -354,14 +353,14 @@ assert_s3_class <- function(arg,
 
 Please take a look at each section of the `assert_s3_class()` function:
 
-  * Use `rlang::caller_arg(arg)` to ...
-  * Use of `call = parent.frame()` to ... 
-  * Use of `cli::cli_abort()` for the error message
-  * Use of glue snytax to add emphasis to sections of the message
+  * observe the use of `rlang::caller_arg(arg)` which converts the symbol or argument name passed in function to a string.
+  * Use of `call = parent.frame()` to to specify the environment form which the user called the function, i.e. `call = parent.frame()`. By setting the default to `parent.frame()` the calling frame that will be used in the messaging will correctly reflect the function the user called. 
+  * Use of `cli::cli_abort()` for the error message.
+  * Use of `glue` snytax to add emphasis to sections of the message
 
 The use of the above, is identical to what we discussed in the `bmi()` function example.
 For this function, a nice touch is that the developer can also further customize the message if the standard message from the `assert_s3_class()` does not meet their needs.
-Most of the `assert_` functions within admiraldev follow similar code pattern, i.e. checking an argument and if an issue/error arises providing a succinct yet informative message. 
+Most of the `assert_` functions within `admiraldev` follow similar code pattern, i.e. checking an argument and if an issue/error arises providing a succinct yet informative message. 
 We encourage readers to check out the `assert_` functions in the `admiraldev` GitHub Repo for additional examples of using `cli` and `glue` R packages.
 
 ## QUALITY OF LIFE IMPROVEMENTS
@@ -372,30 +371,33 @@ Snapshot testing involves capturing output from a function or process at a point
 Snapshot unit tests are a great way to test error messaging, particularly those using `cli::cli_abort()` because it will capture both the error message and the user calling function in the snapshot.
 The testthat package provides snapshot testing capabilities, allowing you to capture current outputs and compare them against stored snapshots during tests.
 If outputs change unexpectedly, the differences are highlighted, prompting an interactive review. 
+As mentioned, this was an ancillary benefit to `admiral`'s unit tests as we made use of more `cli` packages with some additional work not discussed.
 
 ### Standalone
 
 Writing function list `check_numeric()` are incredibly useful when writing a package.
 But it could be daunting to write a suite of functions to check all scenarios.
 Posit, PBC has created a stand alone script with many useful checks.
-You can add these functions to your package by running `usethis::use_standalone("r-lib/rlang", file = "standalone-types-check.R")`; a cop of the script will be placed in your active repository.
-Additional check functions are available with `usethis::use_standalone("insightsengineering/standalone", file = "standalone-checks.R")`.
+You can add these functions to your package by running `usethis::use_standalone("r-lib/rlang", file = "standalone-types-check.R")`; a copy of the script will be placed in your active repository.
+Additional check functions are available with `usethis::use_standalone("insightsengineering/standalone", file = "standalone-checks.R")`. 
+`admiraldev` covers a lot of these cases in the standalone scripts, but again we highly recommend the standalone scripts over re-creating already exisiting tools!
 
 ## CONCLUSIONS
 
 This paper illustrates the critical role of clear and user-friendly messaging in enhancing software usability, particularly for new users navigating R programming. 
-By leveraging tools such as the cli and glue packages, developers can craft error and warning messages that are not only informative but also engaging and supportive, as demonstrated through the bmi() function examples. 
-The admiral package's approach to robust messaging exemplifies best practices, highlighting the importance of improving user communication to prevent confusion and facilitate troubleshooting. 
+By leveraging tools such as the `cli` and `glue` packages, developers can craft error and warning messages that are not only informative but also engaging and supportive, as demonstrated through the `bmi()` function examples. 
+The `admiral` package's approach to robust messaging exemplifies best practices, highlighting the importance of improving user communication to prevent confusion and facilitate troubleshooting. 
 Additionally, the integration of snapshot testing and standalone scripts, as discussed in the paper, offers practical ways to maintain message consistency and reduce dependencies within R projects. 
 Collectively, these strategies and tools contribute to a positive user experience, fostering a more productive and less frustrating interaction with software.
 
 ## REFERENCES
 
-<https://github.com/ddsjoberg/ARD-onboarding> </br> <https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html> </br> <https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R> </br>
-<https://glue.tidyverse.org/> </br>
-<https://cli.tidyverse.org/> </br>
-<https://pharmaverse.github.io/admiral> </br>
-<https://pharmaverse.github.io/admiraldev> </br>
+Error messaging – analysis results datasets onboarding. (n.d.). <https://www.danieldsjoberg.com/ARD-onboarding/05-cli-conditions.html> </br> 
+R-Lib. (n.d.). rlang/R/standalone-types-check.R at main · r-lib/rlang. GitHub. <https://github.com/r-lib/rlang/blob/main/R/standalone-types-check.R> </br>
+Helpers for developing command line interfaces. (n.d.). <https://cli.r-lib.org/index.html> </br>
+Interpreted string literals. (n.d.). <https://glue.tidyverse.org/> </br>
+ADAM in R Asset Library. (n.d.). <https://pharmaverse.github.io/admiral> </br>
+Utility functions and development tools for the Admiral Package Family. (n.d.). <https://pharmaverse.github.io/admiraldev> </br>
 
 ## ACKNOWLEDGMENTS
 
@@ -406,7 +408,7 @@ The R open-source community. You all are a special bunch.
 Your comments and questions are valued and encouraged. Contact the authors at: </br>
 Author Name: Daniel Sjoberg </br>
 Company: Genentech </br>
-Email: sjobergd_at_gene.com
+Email: sjobergd_at_gene.com </br>
 Website: https://www.danieldsjoberg.com/ </br>
  
 Author Name: Ben Straub </br>
