@@ -1,6 +1,6 @@
 ---
 title: "What's in a message?"
-author: "Daniel Sjoberg and Ben Straub"
+author: "Ben Straub (GSK, Philadelphia, United States) <br> Daniel D. Sjoberg (Genentech, South San Francisco, United States)"
 format: html
 editor: source
 ---
